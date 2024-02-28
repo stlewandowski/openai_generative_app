@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% if prev_image %}
+        <a href="{% url 'img' prev_image.image_id %}" class="btn btn-primary" style="margin-bottom: 10px;">Previous Image</a>
+    {% endif %}
+    {% if next_image %}
+        <a href="{% url 'img' next_image.image_id %}" class="btn btn-primary" style="margin-bottom: 10px;">Next Image</a>
+    {% endif %}
+    <img src="{{ dalle_image.image.url }}" alt="{{ dalle_image.image_prompt }}" style="width: 100%;">
+    <table class="table table-bordered table-striped">
+        <tr>
+            <td>Prompt:</td>
+            <td>{{ dalle_image.image_prompt }}</td>
+        </tr>
+        <tr>
+            <td>Date:</td>
+            <td>{{ dalle_image.image_date }}</td>
+        </tr>
+        <tr>
+            <td>Model:</td>
+            <td>{{ dalle_image.image_model }}</td>
+        </tr>
+        <tr>
+            <td>Quality:</td>
+            <td>{{ dalle_image.image_quality }}</td>
+        </tr>
+        <tr>
+            <td>Style:</td>
+            <td>{{ dalle_image.image_style }}</td>
+        </tr>
+        <tr>
+            <td>User:</td>
+            <td>{{ dalle_image.image_user }}</td>
+        </tr>
+        <tr>
+            <td>Size:</td>
+            <td>{{ dalle_image.image_size }}</td>
+        </tr>
+        <tr>
+            <td>Tags:</td>
+            <td>{{  dalle_image.image_tags }}</td>
+        </tr>
+    </table>
+{% endblock %}

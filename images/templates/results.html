@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Created Image</h1>
+    {% if dalle_image %}
+    <img src="{{ dalle_image.image_url }}" alt="{{ dalle_image.image_prompt }}">
+    <table class="table table-bordered table-striped">
+        <tr>
+            <td>Prompt:</td>
+            <td>{{ dalle_image.image_prompt }}</td>
+        </tr>
+        <tr>
+            <td>Date:</td>
+            <td>{{ dalle_image.image_date }}</td>
+        </tr>
+        <tr>
+            <td>Model:</td>
+            <td>{{ dalle_image.image_model }}</td>
+        </tr>
+        <tr>
+            <td>Quality:</td>
+            <td>{{ dalle_image.image_quality }}</td>
+        </tr>
+        <tr>
+            <td>Style:</td>
+            <td>{{ dalle_image.image_style }}</td>
+        </tr>
+        <tr>
+            <td>User:</td>
+            <td>{{ dalle_image.image_user }}</td>
+        </tr>
+        <tr>
+            <td>Size:</td>
+            <td>{{ dalle_image.image_size }}</td>
+        </tr>
+        <tr>
+            <td>Tags:</td>
+            <td>{{  dalle_image.image_tags }}</td>
+        </tr>
+    </table>
+        
+            
+
+        
+    {% else %}
+    <p>No images found.</p>
+{% endif %}
+{% endblock %}

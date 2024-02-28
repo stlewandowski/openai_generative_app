@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>All Details</h1>
+    <!-- Add a form for the filter criteria -->
+    <form method="get" style="margin-bottom: 10px;">
+        <label for="prompt">Prompt:</label>
+        <input type="text" id="prompt" name="prompt" value="{{ request.GET.prompt|default:'' }}">
+
+        <label for="tags">Tags:</label>
+        <input type="text" id="tags" name="tags" value="{{ request.GET.tags|default:'' }}">
+
+        <label for="quality">Quality:</label>
+        <select id="quality" name="quality">
+            <option value="">--Please choose an option--</option>
+            <option value="hd" {% if request.GET.quality == 'hd' %}selected{% endif %}>HD</option>
+            <option value="standard" {% if request.GET.quality == 'standard' %}selected{% endif %}>Standard</option>
+        </select>
+
+        <label for="style">Style:</label>
+        <select id="style" name="style">
+            <option value="">--Please choose an option--</option>
+            <option value="vivid" {% if request.GET.style == 'vivid' %}selected{% endif %}>Vivid</option>
+            <option value="natural" {% if request.GET.style == 'natural' %}selected{% endif %}>Natural</option>
+        </select>
+
+        <input type="submit" value="Filter">
+    </form>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Prompt</th>
+                <th>Date</th>
+                <th>Model</th>
+                <th>Quality</th>
+                <th>Style</th>
+                <th>User</th>
+                <th>Size</th>
+                <th>Tags</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for image in images %}
+                <tr>
+                    <td>
+                        <a href="{% url 'img' image.image_id %}">
+                            <img src="{{ image.image.url }}" alt="{{ image.image_prompt }}" style="height: 150px; width: auto; object-fit: cover;">
+                        </a>
+                    </td>
+                    <td>{{ image.image_prompt }}</td>
+                    <td>{{ image.image_date }}</td>
+                    <td>{{ image.image_model }}</td>
+                    <td>{{ image.image_quality }}</td>
+                    <td>{{ image.image_style }}</td>
+                    <td>{{ image.image_user }}</td>
+                    <td>{{ image.image_size }}</td>
+                    <td>{{ image.image_tags }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

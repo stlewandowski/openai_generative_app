@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>DallE Images</h1>
+    <!-- Add a dropdown menu for the user to select the number of items per page -->
+    <form method="get">
+        <label for="items_per_page">Items per page:</label>
+        <select id="items_per_page" name="items_per_page" onchange="this.form.submit()">
+            <option value="6" {% if items_per_page == '6' %}selected{% endif %}>6</option>
+            <option value="12" {% if items_per_page == '12' %}selected{% endif %}>12</option>
+            <option value="24" {% if items_per_page == '24' %}selected{% endif %}>24</option>
+        </select>
+    </form>
+  
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+        {% for image in images %}
+            <div style="padding: 10px;">
+                <a href="{% url 'img' image.image_id %}">
+                    <img src="{{ image.image.url }}" alt="{{ image.image_prompt }}" style="width: 100%; height: auto;">
+                </a>
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <td>Prompt:</td>
+                        <td>{{ image.image_prompt }}</td>
+                    </tr>
+                    <tr>
+                        <td>Date:</td>
+                        <td>{{ image.image_date }}</td>
+                    </tr>
+                    <tr>
+                        <td>Model:</td>
+                        <td>{{ image.image_model }}</td>
+                    </tr>
+                    <tr>
+                        <td>Quality:</td>
+                        <td>{{ image.image_quality }}</td>
+                    </tr>
+                    <tr>
+                        <td>Style:</td>
+                        <td>{{ image.image_style }}</td>
+                    </tr>
+                    <tr>
+                        <td>User:</td>
+                        <td>{{ image.image_user }}</td>
+                    </tr>
+                    <tr>
+                        <td>Size:</td>
+                        <td>{{ image.image_size }}</td>
+                    </tr>
+                    <tr>
+                        <td>Tags:</td>
+                        <td>{{  image.image_tags }}</td>
+                    </tr>
+                    <tr>
+                        <td><button type="button" class="btn btn-primary similar-btn" 
+                        data-prompt="{{ image.image_prompt }}" 
+                        data-tags="{{ image.image_tags }}" 
+                        data-quality="{{ image.image_quality }}" 
+                        data-style="{{ image.image_style }}">Create Similar</button></td>
+                        <td>Please slightly change the prompt when creating a similar image.</td>
+                    </tr>
+                </table>
+            </div>
+        {% endfor %}
+    </div>
+
+    {% if images.has_previous %}
+        <a href="?page={{ images.previous_page_number }}">Previous</a>
+    {% endif %}
+
+    <span>Page {{ images.number }} of {{ images.paginator.num_pages }}</span>
+
+    {% if images.has_next %}
+        <a href="?page={{ images.next_page_number }}">Next</a>
+    {% endif %}
+    <h2 style="text-align: center;">Create a new image</h2>
+    <form id="create-form" method="post" action="{% url 'create' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+    <table class="table table-bordered table-striped" style="width: 50%; margin: auto;">
+        {% for field in form %}
+            <tr>
+                <td>{{ field.label_tag }}</td>
+                <td>{{ field }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    <div style="text-align: center; margin-top: 10px;">
+        <button type="submit" class="btn btn-primary">Create</button>
+    </div>
+</form>
+    
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const similarBtns = document.getElementsByClassName('similar-btn');
+    const createForm = document.getElementById('create-form');
+
+    console.log("start of logging")
+    console.log(similarBtns); // Should log the list of buttons
+    console.log(createForm); // Should log the form
+
+    for (let i = 0; i < similarBtns.length; i++) {
+        similarBtns[i].addEventListener('click', function() {
+            console.log(this); // Should log the clicked button
+            console.log("Button clicked"); // Should log when the button is clicked
+            console.log(this.getAttribute('data-prompt')); // Should log the prompt
+            console.log(this.getAttribute('data-tags')); // Should log the tags
+            console.log(this.getAttribute('data-quality')); // Should log the quality
+            console.log(this.getAttribute('data-style')); // Should log the style
+            createForm.elements['image_prompt'].value = this.getAttribute('data-prompt');
+            createForm.elements['image_tags'].value = this.getAttribute('data-tags');
+            createForm.elements['image_quality'].value = this.getAttribute('data-quality');
+            createForm.elements['image_style'].value = this.getAttribute('data-style');
+
+            // Scroll the 'create' form into view
+            createForm.scrollIntoView({behavior: "smooth"});
+        });
+    }
+});
+</script>    
+{% endblock %}
+
+
