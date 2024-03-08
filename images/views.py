@@ -14,17 +14,27 @@ from django.db.models import Max, Min
 
 def index(request):
     form = DallEForm()
-    # Get the number of items per page from the GET parameters
-    items_per_page = request.GET.get('items_per_page', 6)  # Default to 6 if not provided
-    # return the index page with all the images
+    items_per_page = request.GET.get('items_per_page', 6)
     images_list = DallEImage.objects.all()
     paginator = Paginator(images_list, items_per_page)
-    # Get the page number from the GET parameters
-    page_number = request.GET.get('page')
+    page_number = int(request.GET.get('page')) if request.GET.get('page') else 1
     images = paginator.get_page(page_number)
 
-    context = {"images": images, 'form': form, 'items_per_page': items_per_page}
+    # Get the total number of pages
+    num_pages = paginator.num_pages
+
+    # Create a list of page numbers to display
+    # This includes the first 2 pages, the last 2 pages, and the current page
+    print(page_number)
+    print(num_pages)
+    start_page = max(1, page_number - 3)
+    end_page = min(num_pages, page_number + 3)
+    page_numbers = list(range(start_page, end_page + 1))
+
+    print(page_numbers)
+    context = {"images": images, 'form': form, 'items_per_page': items_per_page, 'page_numbers': page_numbers}
     return render(request, "index.html", context)
+
 
 def all_details(request):
     images = DallEImage.objects.all()
@@ -46,6 +56,7 @@ def all_details(request):
         images = images.filter(image_style=style)
 
     return render(request, 'all_details.html', {'images': images})
+
 
 def create(request):
     if request.method == 'POST':
@@ -122,6 +133,7 @@ def img(request, img_id):
         "next_image": next_image,
     }
     return render(request, "img.html", context)
+
 
 def about(request):
     context = {"images": [], "tags": [], "prompts": [], "form": None, "results": [], "testval": "testval_about"}

@@ -2,8 +2,32 @@
 
 {% block content %}
     <h1>DallE Images</h1>
+    <!-- First and Previous links -->
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+    <div>
+    <a href="?page=1&items_per_page={{ items_per_page }}">First</a>
+    {% if images.has_previous %}
+        <a href="?page={{ images.previous_page_number }}&items_per_page={{ items_per_page }}">Previous</a>
+    {% endif %}
+    
+    <!-- Page number links -->
+    {% for num in page_numbers %}
+        {% if num == images.number %}
+            <span>{{ num }}</span>  <!-- The current page number is not a link -->
+        {% else %}
+            <a href="?page={{ num }}&items_per_page={{ items_per_page }}">{{ num }}</a>
+        {% endif %}
+    {% endfor %}
+    
+    <!-- Next and Last links -->
+    {% if images.has_next %}
+        <a href="?page={{ images.next_page_number }}&items_per_page={{ items_per_page }}">Next</a>
+    {% endif %}
+    <a href="?page={{ images.paginator.num_pages }}&items_per_page={{ items_per_page }}">Last</a>
+    </div>
     <!-- Add a dropdown menu for the user to select the number of items per page -->
-    <form method="get">
+    <form method="get" style="margin-left: auto;">
+        <!-- <input type="hidden" name="page" value="{{ images.number }}"> -->
         <label for="items_per_page">Items per page:</label>
         <select id="items_per_page" name="items_per_page" onchange="this.form.submit()">
             <option value="6" {% if items_per_page == '6' %}selected{% endif %}>6</option>
@@ -11,6 +35,7 @@
             <option value="24" {% if items_per_page == '24' %}selected{% endif %}>24</option>
         </select>
     </form>
+    </div>
   
     <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
         {% for image in images %}
