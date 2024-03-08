@@ -19,19 +19,12 @@ def index(request):
     paginator = Paginator(images_list, items_per_page)
     page_number = int(request.GET.get('page')) if request.GET.get('page') else 1
     images = paginator.get_page(page_number)
-
     # Get the total number of pages
     num_pages = paginator.num_pages
-
     # Create a list of page numbers to display
-    # This includes the first 2 pages, the last 2 pages, and the current page
-    print(page_number)
-    print(num_pages)
     start_page = max(1, page_number - 3)
     end_page = min(num_pages, page_number + 3)
     page_numbers = list(range(start_page, end_page + 1))
-
-    print(page_numbers)
     context = {"images": images, 'form': form, 'items_per_page': items_per_page, 'page_numbers': page_numbers}
     return render(request, "index.html", context)
 
