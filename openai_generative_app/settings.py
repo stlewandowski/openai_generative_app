@@ -14,8 +14,13 @@ from dotenv import find_dotenv
 from pathlib import Path
 import os
 
-env_file = find_dotenv("dev.env")
-load_dotenv(env_file)
+# Load environment variables from .env file, if it exists (dev) if not, use the environment variables from the server
+current_dir = os.path.dirname(os.path.abspath(__file__))
+filename = "dev.env"
+file_path = os.path.join(current_dir, filename)
+if os.path.isfile(file_path):
+    env_file = find_dotenv("dev.env")
+    load_dotenv(env_file)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
