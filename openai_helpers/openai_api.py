@@ -10,31 +10,15 @@ class OpenaiAPI:
     def __init__(self, api_key=os.getenv("OPENAI_API_KEY")):
         openai.api_key = api_key
 
-    # need to rework this for dalle 2
-    # def get_image(self, prompt, size="1024x1024", number=3, user="slewan"):
-    #     try:
-    #         image_resp = openai.images.generate(
-    #             model="dall-e-2",
-    #             prompt=prompt,
-    #             size=size,
-    #             n=number,
-    #             user=user,
-    #         )
-    #     except Exception as e:
-    #         print(f"ERROR: {e}")
-    #         sys.exit()
-    #     for x in image_resp.data: print(f"Dalle2 Image: {x.url}")
-    #     return image_resp
-
     def get_image(
-        self,
-        prompt,
-        size="1792x1024",
-        quality="hd",
-        style="vivid",
-        user=None,
-        n=1,
-        model="dall-e-3",
+            self,
+            prompt,
+            size="1792x1024",
+            quality="hd",
+            style="vivid",
+            user=None,
+            n=1,
+            model="dall-e-3",
     ):
         # setting quality to hd and style to vivid based on testing
         response = openai.images.generate(
@@ -129,21 +113,3 @@ if __name__ == "__main__":
     ai = OpenaiAPI()
     url = ai.get_image(prompt, quality=quality, style=style, user=user)
     ai.save_image_3(url, prompt, fpath)
-
-    # ai = OpenaiAPI()
-    # prompt = "realistic image of a crowded sci fi space station in the style of blade runner"
-    # #print("Dalle3-hd-natural:")
-    # #url = ai.get_image_3(prompt, quality='hd', style='natural')
-    # print("Dalle3-hd-vivid:")
-    # url2 = ai.get_image_3(prompt, quality='hd', style='vivid')
-    # #print("Dalle3-standard-natrual:")
-    # #url3 = ai.get_image_3(prompt, quality='standard', style='natural')
-    # print("Dalle3-standard-vivid:")
-    # url4 = ai.get_image_3(prompt, quality='standard', style='vivid')
-    #
-    # for url in [url2, url4]:
-    #     ai.save_image_3(url, prompt, "//r7server/data/dalle/original")
-    # print("#" * 80)
-    # print("Dalle2:")
-    # images = ai.get_image(prompt)
-    # ai.save_image(images, prompt, "//r7server/data/dalle/original")
